@@ -1,7 +1,6 @@
+import java.util.Scanner;
 
 public class MergeSort {
-	
-	public static int[] a = {7,5,4,3,1,0,9,2,6,8}; 
 	
 	public static void divide(int a[], int l, int h){
 		if(h>l){
@@ -13,44 +12,38 @@ public class MergeSort {
 	}
 	
 	public static void merge(int a[], int l, int m, int h){ 
-		int n1 = m-l+1;
-		int n2 = h-m;
-		
-		int[] a1 = new int [n1];
-		int[] a2 = new int [n2];
-		
-		int j = 0, k = 0;
-		
-		for(int i = l; i <= m ; i++){
-			a1[j++] = a[i];
-		}
-		for(int i = m+1; i <= h; i++){
-			a2[k++] = a[i];
-		}
 		int i = l;
-		j= 0;
-		k= 0;
-		
-		while(j<n1&&k<n2){
-			if(a1[j]<a2[k]){
-				a[i++] = a1[j++];
-			}else{
-				a[i++] = a2[k++];
+		int j = m+1;
+		int k = l;
+		int aux[] = a.clone();
+		while(i<=m||j<=h){
+			if(i>m){
+				a[k++] = aux[j++];
+			}else if(j>h){
+				a[k++] = aux[i++];
+			}else if(aux[i]<=aux[j]){
+				a[k++] = aux[i++];
+			}else {
+				a[k++] = aux[j++];
 			}
 		}
-		while(j<n1){
-			a[i++] = a1[j++];
-		}
-		while(k<n2){
-			a[i++] = a2[k++];
-		}
-		
 	}
-	
+
 	public static void main(String s[]){
-		divide(a, 0, a.length-1);
-		for(int l : a){
-			System.out.print(l+" ");
-		}
+		Scanner in = new Scanner(System.in);
+        int t = in.nextInt();
+        for(int a0 = 0; a0 < t; a0++){
+        	int n = in.nextInt();
+            int arr[] = new int[n];
+            for(int arr_i=0; arr_i < n; arr_i++){
+                arr[arr_i] = in.nextInt();
+            }
+        	divide(arr, 0, arr.length-1);
+    		for(int l : arr){
+    			System.out.print(l+" ");
+    		}
+    		System.out.println();
+        }
+        in.close();
 	}
 }
