@@ -11,11 +11,11 @@ public class BalancedBrackets {
 			else if(isopen(expression.charAt(i)))
 				open.push(expression.charAt(i));
 			else{
-				if(open.size()>0&&!ismatch(open.pop(), expression.charAt(i)))
+				if(open.empty()||!ismatch(open.pop(), expression.charAt(i)))
 					return false;
 			}
 		
-		return true;
+		return open.empty();
 	}
 	
 	static boolean ismatch(char a, char b){
@@ -37,10 +37,14 @@ public class BalancedBrackets {
 	public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         int t = in.nextInt();
+        String[] expression = new String[t];
         for (int a0 = 0; a0 < t; a0++) {
-            String expression = in.next();
-            System.out.println( (isBalanced(expression)) ? "YES" : "NO" );
+            expression[a0] = in.next();
         }
+        for (int a0 = 0; a0 < t; a0++) {
+        	System.out.println( (isBalanced(expression[a0])) ? "YES" : "NO" );
+        }
+        
         in.close();
     }
 }
