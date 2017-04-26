@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -6,21 +5,15 @@ public class BalancedBrackets {
 	
 	public static boolean isBalanced(String expression) {
 		Stack<Character> open = new Stack<>();
-		ArrayList<Character> close = new ArrayList<>();
 		for(int i = 0 ; i<expression.length(); i++)
 			if(i<expression.length()-1&&ismatch(expression.charAt(i), expression.charAt(i+1)))
 				i++;
 			else if(isopen(expression.charAt(i)))
 				open.push(expression.charAt(i));
-			else
-				close.add(expression.charAt(i));
-		
-		if(open.size()!=close.size())
-			return false;
-		int i = 0;
-		if(open.size()>0)
-			if(!ismatch(open.pop(), close.get(i++)))
-				return false;
+			else{
+				if(open.size()>0&&!ismatch(open.pop(), expression.charAt(i)))
+					return false;
+			}
 		
 		return true;
 	}
