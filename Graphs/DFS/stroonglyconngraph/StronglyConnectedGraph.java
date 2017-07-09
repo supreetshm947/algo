@@ -1,5 +1,4 @@
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream.PutField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,11 +11,13 @@ public class StronglyConnectedGraph {
 	private Map<Integer,List<Integer>> rAdjList;
 	private Map<Integer,List<Integer>> cAdjList; 
 	private Map<Integer, Boolean> visited;
+	private Map<Integer, Boolean> sVisited;
 	private ArrayList<Integer> tList;
 	private int size;
 	private int leader;
 	Map<Integer,Integer> leaders;
 	Map<Integer,Integer> topological;
+	Map<Integer,Integer> rtopological;
 	
 	void init(){
 		adjList = new HashMap<Integer,List<Integer>>();
@@ -26,6 +27,8 @@ public class StronglyConnectedGraph {
 		leaders = new HashMap<>();
 		topological = new HashMap<>();
 		cAdjList = new HashMap<>();
+		sVisited = new HashMap<>();
+		rtopological = new HashMap<>();
 		
 		try(Scanner scanner = new Scanner (new InputStreamReader(this.getClass().
 	    		getClassLoader().getResourceAsStream("input.txt")));) {
@@ -38,6 +41,7 @@ public class StronglyConnectedGraph {
 				   adj.add(Integer.parseInt(num[i]));
 			   adjList.put(Integer.parseInt(num[0]), adj);
 			   visited.put(Integer.parseInt(num[0]), false);
+			   sVisited.put(Integer.parseInt(num[0]), false);
 			   tList.add(Integer.parseInt(num[0]));
 		    }
 		    size = tList.size();
@@ -60,11 +64,23 @@ public class StronglyConnectedGraph {
 	
 	public void computeStronglyConnected(){
 		size = Collections.min(rAdjList.keySet(), null);
-		for(int i : rAdjList.keySet()){
+		List<Integer> tSet = new ArrayList<>(rAdjList.keySet()); 
+		Collections.reverse(tSet);
+		for(int i : tSet){
 			leader = i;
 			dfs1(i);
 		}
 		convertGraph(topological);
+		for(int i : tSet){
+			List<Integer> sGraph = new ArrayList<>();
+			leader = i;
+			dfs2(i, sGraph);
+			if(sGraph.size()>=1){
+				for(int o : sGraph)
+					System.out.print(rtopological.get(o)+"->");
+				System.out.println();
+			}
+		}
 	}
 	
 	public void dfs1(int a){
@@ -74,13 +90,28 @@ public class StronglyConnectedGraph {
 			for(int j : rAdjList.get(a)){
 				dfs1(j);
 			}
-			topological.put(a, size++);
+			topological.put(a, size);
+			rtopological.put(size++, a);
+		} 
+	}
+	
+	public void dfs2(int a,	 List<Integer> sGraph){
+		if(!sVisited.get(a)){
+			sGraph.add(a);
+			sVisited.put(a, true);
+			for(int j : cAdjList.get(a)){
+				dfs2(j,sGraph);
+			}
 		} 
 	}
 	
 	public void convertGraph(Map<Integer, Integer> top){
-		for(int i : top.keySet()){
-			cAdjList.put(top.get(i), rAdjList.get(i));
+		for(Integer i : adjList.keySet()){ 
+			List<Integer> tlist = new ArrayList<>();
+			for(Integer j : adjList.get(i)){  
+				tlist.add(topological.get(j));
+			}
+			cAdjList.put(top.get(i), tlist);
 		}
 	}
 	
@@ -91,7 +122,6 @@ public class StronglyConnectedGraph {
 		strong.reverseGraph();
 		
 		strong.computeStronglyConnected();
-		
-		int g = 98980;
+			
 	}
 }
