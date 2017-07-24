@@ -32,20 +32,20 @@ public class BinarySearchTree {
 			}
 		}
 	}
-	
-	void incNodeCounter(Node n){
+
+	void incNodeCounter(Node n) {
 		n.nodesBelow++;
 		Node p = n.parent;
-		while(p!=null){
+		while (p != null) {
 			p.nodesBelow++;
 			p = p.parent;
 		}
 	}
-	
-	void decNodeCounter(Node n){
+
+	void decNodeCounter(Node n) {
 		n.nodesBelow--;
 		Node p = n.parent;
-		while(p!=null){
+		while (p != null) {
 			p.nodesBelow--;
 			p = p.parent;
 		}
@@ -87,6 +87,7 @@ public class BinarySearchTree {
 			}
 			p1.left = lt;
 			lt.parent = p1;
+			p1.nodesBelow += lt.nodesBelow;
 		}
 		return p;
 	}
@@ -187,6 +188,18 @@ public class BinarySearchTree {
 		return s;
 	}
 
+	Node select(int rank, Node start){
+		int a = 0;
+		if(start.left!=null)
+			a = start.left.nodesBelow;
+		if(a==rank-1)
+			return start;
+		else if(a>=rank)
+			return select(rank, start.left);
+		else
+			return select(rank-a-1, start.right);
+			
+	}
 	public static void main(String s[]) {
 		BinarySearchTree bst = new BinarySearchTree();
 		Scanner scan = new Scanner(System.in);
@@ -198,10 +211,11 @@ public class BinarySearchTree {
 		System.out.println();
 		bst.preorder(bst.root);
 		System.out.println();
-		bst.delete(544);
-		bst.delete(54);
-		System.out.println((bst.predecessor(55) != null) ? bst.predecessor(55).value : "");
-		System.out.println((bst.successor(55) != null) ? bst.successor(55).value : "");
+		bst.delete(555);
+		bst.delete(323);
+		/*System.out.println((bst.predecessor(55) != null) ? bst.predecessor(55).value : "");
+		System.out.println((bst.successor(55) != null) ? bst.successor(55).value : "");*/
+		System.out.println(bst.select(8, bst.root).value);
 		scan.close();
 	}
 }
