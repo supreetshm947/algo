@@ -87,7 +87,10 @@ public class BinarySearchTree {
 			}
 			p1.left = lt;
 			lt.parent = p1;
-			p1.nodesBelow += lt.nodesBelow;
+			while(p1!=rt.parent){
+				p1.nodesBelow += lt.nodesBelow;
+				p1 = p1.parent;
+			}
 		}
 		return p;
 	}
@@ -134,7 +137,7 @@ public class BinarySearchTree {
 			if (start.right != null)
 				if (start.right.value == val)
 					;
-				else
+				else 
 					return parentSearchforDeletion(val, start.right);
 			else
 				return null;
@@ -211,11 +214,11 @@ public class BinarySearchTree {
 		System.out.println();
 		bst.preorder(bst.root);
 		System.out.println();
-		bst.delete(555);
-		bst.delete(323);
+		bst.delete(4);
+	//	bst.delete(323);
 		/*System.out.println((bst.predecessor(55) != null) ? bst.predecessor(55).value : "");
 		System.out.println((bst.successor(55) != null) ? bst.successor(55).value : "");*/
-		System.out.println(bst.select(8, bst.root).value);
+		System.out.println(bst.select(6, bst.root).value);
 		scan.close();
 	}
 }
