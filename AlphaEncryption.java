@@ -6,7 +6,7 @@ public class AlphaEncryption {
 
 	public static char getDecodedChar(char a) {
 		int decoded = (int) a + 3;
-		if (decoded > 122)
+		if (decoded > 'z')
 			return (char) (decoded - 26);
 		return (char) decoded;
 	}
