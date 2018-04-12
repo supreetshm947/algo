@@ -5,10 +5,8 @@ import java.util.stream.Collectors;
 public class AlphaEncryption {
 
 	public static char getDecodedChar(char a) {
-		int decoded = (int) a + 3;
-		if (decoded > 'z')
-			return (char) (decoded - 26);
-		return (char) decoded;
+		int decoded = (a+3) - 97;
+ return (char) (decoded%26+97);
 	}
 
 	public static void main(String[] args) {
